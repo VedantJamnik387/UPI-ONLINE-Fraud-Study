@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UPI and Online Payment Fraud Study</title>
+
+    <style>
+        /* Basic page design */
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            color: #263445;
+            line-height: 1.6;
+        }
+
+        .topbar {
+            background-color: #173b67;
+            color: white;
+            padding: 10px 5%;
+            font-size: 13px;
+        }
+
+        header {
+            background-color: white;
+            border-bottom: 1px solid #dddddd;
+            padding: 15px 5%;
+        }
+
+        .nav-area {
+            max-width: 1100px;
+            margin: auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .logo {
+            color: #173b67;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        nav button {
+            background-color: white;
+            border: 1px solid #d5dfeb;
+            color: #173b67;
+            padding: 9px 12px;
+            margin: 3px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        nav button:hover,
+        nav button.active {
+            background-color: #173b67;
+            color: white;
+        }
+
+        .language-picker {
+            display: flex;
+            align-items: center;
+            gap: 7px;
+            color: #173b67;
+            font-size: 13px;
+        }
+
+        .language-picker select {
+            padding: 8px;
+            border: 1px solid #d5dfeb;
+            border-radius: 5px;
+            background: white;
+            color: #173b67;
+        }
+
+        .container {
+            width: 92%;
+            max-width: 1100px;
+            margin: auto;
+        }
+
+        /* Only the selected page is displayed */
+        .page {
+            display: none;
+        }
+
+        .page.active {
+            display: block;
+        }
+
+        .hero {
+            background-color: #214f7d;
+            color: white;
+            padding: 55px 0;
+        }
+
+        .hero h1 {
+            font-size: 38px;
+            margin: 10px 0;
+        }
+
+        .hero p {
+            max-width: 700px;
+        }
+
+        .button {
+            display: inline-block;
+            background-color: white;
+            color: #173b67;
+            border: none;
+            padding: 10px 15px;
+            margin: 8px 5px 0 0;
+            border-radius: 5px;
+            cursor: pointer;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .blue-button {
+            background-color: #173b67;
+            color: white;
+        }
+
+        .section {
+            padding: 25px 0;
+        }
+
+        .section h2,
+        .page-title h1 {
+            color: #173b67;
+        }
+
+        .card {
+            background-color: white;
+            border: 1px solid #e0e5eb;
+            border-radius: 8px;
+            padding: 18px;
+            margin-bottom: 15px;
+        }
+
+        .card h3 {
+            color: #173b67;
+            margin-top: 0;
+        }
+
+        .three-columns {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+
+        .two-columns {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        .number-card strong {
+            display: block;
+            color: #173b67;
+            font-size: 26px;
+        }
+
+        .note {
+            background-color: #fff5e6;
+            border-left: 4px solid #e89b35;
+            padding: 12px 15px;
+            margin: 18px 0;
+            font-size: 14px;
+        }
+
+        .blue-note {
+            background-color: #edf5fc;
+            border-left: 4px solid #245b91;
+            padding: 12px 15px;
+            margin: 18px 0;
+            font-size: 14px;
+        }
+
+        .page-title {
+            padding: 30px 0 10px;
+        }
+
+        .page-title h1 {
+            margin-bottom: 5px;
+        }
+
+        /* Survey tables */
+        .table-box {
+            overflow-x: auto;
+            background-color: white;
+            border: 1px solid #dddddd;
+            border-radius: 7px;
+        }
+
+        table {
+            width: 100%;
+            min-width: 650px;
+            border-collapse: collapse;
+            font-size: 13px;
+        }
+
+        th, td {
+            padding: 11px;
+            border-bottom: 1px solid #e5e5e5;
+            text-align: left;
+            vertical-align: top;
+        }
+
+        th {
+            background-color: #eaf1f8;
+            color: #173b67;
+        }
+
+        /* Simple chart bars */
+        .chart-row {
+            margin: 12px 0;
+            font-size: 13px;
+        }
+
+        .chart-label {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+        }
+
+        .chart-background {
+            background-color: #e4eaf0;
+            height: 10px;
+            border-radius: 10px;
+        }
+
+        .chart-bar {
+            background-color: #3978ad;
+            height: 10px;
+            border-radius: 10px;
+        }
+
+        /* Interview questions */
+        .question-card {
+            background-color: white;
+            border: 1px solid #dddddd;
+            border-radius: 8px;
+            padding: 18px;
+        }
+
+        .question-card h3 {
+            color: #173b67;
+        }
+
+        .question-card li {
+            margin-bottom: 12px;
+        }
+
+        .question-card small {
+            display: block;
+            color: #667386;
+        }
+
+        footer {
+            background-color: #142f4d;
+            color: white;
+            padding: 22px 5%;
+            margin-top: 30px;
+            font-size: 13px;
+        }
+
+        @media (max-width: 700px) {
+            .nav-area {
+                display: block;
+            }
+
+            nav {
+                margin-top: 12px;
+            }
+
+            .hero h1 {
+                font-size: 30px;
+            }
+
+            .three-columns,
+            .two-columns {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media print {
+            header, .topbar, footer, .no-print {
+                display: none;
+            }
+
+            .page {
+                display: none;
+            }
+
+            #questions {
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="topbar">
+        Haribhai V. Desai College of Arts, Science and Commerce, Pune | S.Y. B.Sc. Cyber Security | Group 9
+    </div>
+
+    <header>
+        <div class="nav-area">
+            <div class="logo">UPI & ONLINE FRAUD STUDY</div>
+            <nav>
+                <button class="active" onclick="showPage('home', this)">Home</button>
+                <button onclick="showPage('upi', this)">Shopkeeper Survey</button>
+                <button onclick="showPage('online', this)">Online Survey</button>
+                <button onclick="showPage('questions', this)">Questions</button>
+            </nav>
+            <div class="language-picker">
+                <label for="languageSelect">Language:</label>
+                <select id="languageSelect" onchange="changeLanguage(this.value)">
+                    <option value="en">English</option>
+                    <option value="hi">हिन्दी</option>
+                    <option value="mr">मराठी</option>
+                </select>
+            </div>
+        </div>
+    </header>
+
+    <!-- HOME PAGE -->
+    <main id="home" class="page active">
+        <div class="hero">
+            <div class="container">
+                <p>Cyber Security Field Project</p>
+                <h1>UPI and Online Payment Fraud Awareness</h1>
+                <p>Learn about common UPI and online payment frauds. This website explains some warning signs and basic safety steps for digital payment users.</p>
+                <button class="button" onclick="showPage('upi')">View UPI Survey</button>
+                <button class="button" onclick="showPage('questions')">Interview Questions</button>
+            </div>
+        </div>
+
+        <div class="container">
+            <div class="three-columns section">
+                <div class="card number-card">
+                    <strong>30</strong>
+                    Shopkeeper sample records
+                </div>
+                <div class="card number-card">
+                    <strong>20</strong>
+                    Public sample records
+                </div>
+                <div class="card number-card">
+                    <strong>50</strong>
+                    Total sample records
+                </div>
+            </div>
+
+            <div class="note">
+                <strong>Important: Demo data</strong><br>
+                The 30 shopkeeper and 20 public responses on this website are fictional examples. They are only included to show how survey information can be displayed. Replace them with the real answers collected during your field visits.
+            </div>
+
+            <div class="section">
+                <h2>About this Project</h2>
+                <div class="card">
+                    <p>This project is about UPI and online payment fraud awareness. We want to understand common fraud methods faced or observed by shopkeepers and other people.</p>
+                    <p>Some topics included in this project are fake payment screenshots, QR code problems, collect request scams, phishing links and fake customer care calls.</p>
+                    <p>This is an awareness website. It does not connect to bank accounts or check real-time UPI payments.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Common UPI Fraud Methods</h2>
+                <div class="three-columns">
+                    <div class="card">
+                        <h3>1. Fake Payment Screenshot</h3>
+                        <p>A person may show an edited or old payment screenshot and say that the payment is completed. Check your own payment app before giving the goods.</p>
+                    </div>
+                    <div class="card">
+                        <h3>2. QR Code Replacement</h3>
+                        <p>Someone may put another QR code over the original shop QR code. Always check the receiver name after scanning.</p>
+                    </div>
+                    <div class="card">
+                        <h3>3. Collect Request Scam</h3>
+                        <p>A person may send a payment request and say that it is for receiving money. Read the request before entering your UPI PIN.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Common Online Fraud Methods</h2>
+                <div class="three-columns">
+                    <div class="card">
+                        <h3>1. Phishing Link</h3>
+                        <p>Fake messages may contain links for KYC updates, rewards or account updates. Do not enter personal details on unknown websites.</p>
+                    </div>
+                    <div class="card">
+                        <h3>2. Fake Customer Care</h3>
+                        <p>Some callers pretend to be bank or courier staff and ask for private information. Use official customer care numbers only.</p>
+                    </div>
+                    <div class="card">
+                        <h3>3. Remote Access App</h3>
+                        <p>Unknown callers may ask you to install an app or share your mobile screen. Do not give remote access to unknown people.</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>Basic Safety Tips</h2>
+                <div class="card">
+                    <ul>
+                        <li>Never share your UPI PIN or OTP with anyone.</li>
+                        <li>You do not need to enter your UPI PIN to receive money.</li>
+                        <li>Check the receiver name before making a UPI payment.</li>
+                        <li>Shopkeepers should check the payment in their own app or bank account.</li>
+                        <li>Do not click unknown payment or KYC links.</li>
+                        <li>Do not install unknown screen-sharing applications.</li>
+                        <li>For cyber financial fraud, contact helpline 1930 or visit cybercrime.gov.in.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- SHOPKEEPER SURVEY PAGE -->
+    <main id="upi" class="page">
+        <div class="container">
+            <div class="page-title">
+                <h1>UPI Fraud – Shopkeeper Survey</h1>
+                <p>30 sample records for local shopkeepers.</p>
+            </div>
+
+            <div class="note">
+                These are fictional demo responses. Replace them with answers collected from your actual shopkeeper interviews.
+            </div>
+
+            <div class="two-columns">
+                <div class="card">
+                    <h3>Survey Summary</h3>
+                    <p>Total sample respondents: <strong>30</strong></p>
+                    <p>The examples include fake screenshots, fake confirmations, QR code issues, collect requests and other cases.</p>
+                </div>
+                <div class="card">
+                    <h3>Fraud Types in Sample Data</h3>
+                    <div id="upiChart"></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>30 Shopkeeper Sample Responses</h2>
+                <div class="table-box">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Fraud Type</th>
+                                <th>Example Response</th>
+                                <th>Outcome</th>
+                            </tr>
+                        </thead>
+                        <tbody id="upiRows"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- ONLINE FRAUD SURVEY PAGE -->
+    <main id="online" class="page">
+        <div class="container">
+            <div class="page-title">
+                <h1>Online Fraud – Public Survey</h1>
+                <p>20 sample records for other people.</p>
+            </div>
+
+            <div class="note">
+                These are fictional demo responses. Replace them with actual answers collected from your interviews.
+            </div>
+
+            <div class="two-columns">
+                <div class="card">
+                    <h3>Survey Summary</h3>
+                    <p>Total sample respondents: <strong>20</strong></p>
+                    <p>The examples include phishing links, fake customer care calls, OTP tricks, shopping fraud and other cases.</p>
+                </div>
+                <div class="card">
+                    <h3>Fraud Types in Sample Data</h3>
+                    <div id="onlineChart"></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>20 Public Sample Responses</h2>
+                <div class="table-box">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Fraud Type</th>
+                                <th>Example Response</th>
+                                <th>Action / Outcome</th>
+                            </tr>
+                        </thead>
+                        <tbody id="onlineRows"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- INTERVIEW QUESTIONS PAGE -->
+    <main id="questions" class="page">
+        <div class="container">
+            <div class="page-title">
+                <h1>Interview Questions</h1>
+                <p>These questions can be used during the field visits.</p>
+            </div>
+
+            <div class="note">
+                Do not ask anyone for their UPI PIN, OTP, password or full bank details. Do not publish personal information on this website.
+            </div>
+
+            <div class="two-columns">
+                <div class="question-card">
+                    <h3>UPI Fraud – 10 Questions for Shopkeepers</h3>
+                    <ol>
+                        <li>Have you ever faced or seen any UPI payment fraud at your shop?<small>Yes / No / Observed only</small></li>
+                        <li>Which type of UPI fraud have you faced or seen?<small>Fake screenshot / Fake confirmation / QR code issue / Collect request / Other</small></li>
+                        <li>Has anyone shown you a payment screenshot without sending the money?<small>Yes / No</small></li>
+                        <li>Has anyone changed or covered your shop QR code?<small>Yes / No / Not sure</small></li>
+                        <li>Have you received a UPI collect request from an unknown person?<small>Yes / No</small></li>
+                        <li>How do you check that a customer's payment is received?<small>Payment app / Bank SMS / Bank statement / Soundbox / Other</small></li>
+                        <li>Do you check the receiver name or UPI ID before accepting a payment?<small>Always / Sometimes / Never</small></li>
+                        <li>Have you lost money or goods because of a payment fraud attempt?<small>Yes / No / Prefer not to say</small></li>
+                        <li>What did you do after noticing a suspicious payment?<small>Write a short answer.</small></li>
+                        <li>What information would help you avoid UPI fraud?<small>Write a short answer.</small></li>
+                    </ol>
+                </div>
+
+                <div class="question-card">
+                    <h3>Online Fraud – 10 Questions for People</h3>
+                    <ol>
+                        <li>Have you or someone you know faced or seen an online payment fraud?<small>Yes / No / Observed only</small></li>
+                        <li>Which type of online fraud did you face or see?<small>Phishing link / Fake customer care / OTP trick / Shopping fraud / Remote access / Other</small></li>
+                        <li>Have you received a suspicious SMS, WhatsApp message or email link?<small>Yes / No</small></li>
+                        <li>Has anyone called you pretending to be bank or customer-care staff?<small>Yes / No</small></li>
+                        <li>Has anyone asked you to share an OTP, UPI PIN or password?<small>Yes / No. Do not write the actual code.</small></li>
+                        <li>Has anyone asked you to install an app to solve a payment problem?<small>Yes / No</small></li>
+                        <li>Have you paid an online seller but not received the product?<small>Yes / No</small></li>
+                        <li>How do you check whether a payment link or website is genuine?<small>Write a short answer.</small></li>
+                        <li>Do you know where to report an online financial fraud?<small>Yes / No / Not sure</small></li>
+                        <li>What information would help you avoid online fraud?<small>Write a short answer.</small></li>
+                    </ol>
+                </div>
+            </div>
+
+            <div class="section no-print">
+                <button class="button blue-button" onclick="window.print()">Print Questions</button>
+                <button class="button" onclick="showPage('home')">Back to Home</button>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <div class="container">
+            <strong>UPI and Online Payment Fraud Study</strong>
+            <p>S.Y. B.Sc. Cyber Security | Group 9 | Academic Year 2026–27</p>
+            <p>Haribhai V. Desai College of Arts, Science and Commerce, Pune</p>
+            <p>Educational awareness project only. This website does not connect to banks or detect fraud automatically.</p>
+        </div>
+    </footer>
+
+    <script>
+        // This function changes the page when a navigation button is clicked.
+        function showPage(pageName, button) {
+            var pages = document.getElementsByClassName("page");
+
+            for (var i = 0; i < pages.length; i++) {
+                pages[i].classList.remove("active");
+            }
+
+            document.getElementById(pageName).classList.add("active");
+
+            var navButtons = document.querySelectorAll("nav button");
+            for (var j = 0; j < navButtons.length; j++) {
+                navButtons[j].classList.remove("active");
+            }
+
+            // The button argument is not passed by the buttons inside the page.
+            if (button) {
+                button.classList.add("active");
+            } else {
+                for (var k = 0; k < navButtons.length; k++) {
+                    if (navButtons[k].getAttribute("onclick").indexOf(pageName) !== -1) {
+                        navButtons[k].classList.add("active");
+                    }
+                }
+            }
+
+            window.scrollTo(0, 0);
+        }
+
+        // Sample UPI responses. These are examples, not real interview results.
+        var upiData = [
+            ["Shop 01", "Fake payment screenshot", "A customer showed a payment screenshot, but no credit appeared in the shop payment app.", "Shopkeeper checked the app before handing over goods."],
+            ["Shop 02", "Fake payment screenshot", "A buyer showed an old payment image and said the network was slow.", "Payment was checked again; no matching credit was found."],
+            ["Shop 03", "Fake payment screenshot", "A cropped screenshot was shown as proof of a successful transfer.", "Shopkeeper waited for confirmation in the app."],
+            ["Shop 04", "Fake payment screenshot", "The transaction reference in a displayed image did not match the shop payment record.", "Suspicious payment was not accepted as complete."],
+            ["Shop 05", "Fake payment screenshot", "A customer reused a screenshot from an earlier purchase.", "Shopkeeper checked the latest transaction history."],
+            ["Shop 06", "Fake payment screenshot", "A fake pending-payment screen was shown as a successful payment.", "Goods were held until payment was confirmed."],
+            ["Shop 07", "Fake payment screenshot", "A payment image was sent through a messaging app, but the account showed no credit.", "Shopkeeper did not rely only on the image."],
+            ["Shop 08", "Fake payment screenshot", "A screenshot was accepted before checking the account balance.", "Demo example of a possible loss; verify every payment."],
+            ["Shop 09", "Fake voice / confirmation", "A caller claimed that a payment had been completed and asked the shopkeeper to trust the audio confirmation.", "Shopkeeper checked the transaction in the payment app."],
+            ["Shop 10", "Fake voice / confirmation", "A customer played an audio message saying that money had been sent.", "No matching payment was visible at that time."],
+            ["Shop 11", "Fake voice / confirmation", "A phone call created pressure to hand over goods quickly after a claimed payment.", "Shopkeeper waited for a real credit notification."],
+            ["Shop 12", "Fake voice / confirmation", "An audio confirmation was treated as proof even though the transaction was not checked.", "Example highlights the need to verify in the app."],
+            ["Shop 13", "QR code issue", "A sticker placed over the shop QR appeared to show a different receiver name.", "The QR was checked before customers used it."],
+            ["Shop 14", "QR code issue", "The UPI ID shown after scanning did not match the shop account.", "Payment was cancelled and the QR was checked."],
+            ["Shop 15", "QR code issue", "A printed QR copy was found near the original payment display.", "Shopkeeper removed the unfamiliar QR."],
+            ["Shop 16", "QR code issue", "A customer pointed out that the receiver details looked different from the shop name.", "Shopkeeper rechecked the displayed QR."],
+            ["Shop 17", "Collect request scam", "An unknown person sent a collect request and described it as a way to receive money.", "Request was declined."],
+            ["Shop 18", "Collect request scam", "A payment request was sent with a message asking the shopkeeper to approve it for a refund.", "Shopkeeper did not approve the request."],
+            ["Shop 19", "Collect request scam", "A buyer asked the shopkeeper to enter a UPI PIN after sending a collect request.", "The request was cancelled."],
+            ["Shop 20", "Collect request scam", "A message claimed that approving a request would add money to the shop account.", "Shopkeeper checked the request details and rejected it."],
+            ["Shop 21", "Collect request scam", "A collect request came from an unknown UPI account during a purchase discussion.", "Shopkeeper did not approve an unknown request."],
+            ["Shop 22", "Wrong UPI ID / transfer", "A customer selected a similar-looking UPI ID and sent money to the wrong receiver.", "The shop did not receive the payment; customer was advised to contact their bank/app."],
+            ["Shop 23", "Wrong UPI ID / transfer", "A payment was sent to an incorrect receiver because the UPI ID was not checked carefully.", "Example of a payment mistake; verify receiver details first."],
+            ["Shop 24", "No fraud reported", "Respondent did not report or observe a UPI fraud incident.", "Uses the payment app to check successful credits."],
+            ["Shop 25", "No fraud reported", "Respondent had not faced or observed a UPI fraud attempt.", "Checks the payment notification before completing sales."],
+            ["Shop 26", "No fraud reported", "No UPI fraud experience was reported in this demo response.", "Keeps the shop QR in a visible place."],
+            ["Shop 27", "No fraud reported", "Respondent said no suspicious UPI payment had been noticed.", "Checks transaction history when unsure."],
+            ["Shop 28", "No fraud reported", "No fraud incident was reported by this sample respondent.", "Does not share the UPI PIN with others."],
+            ["Shop 29", "No fraud reported", "Respondent had not experienced a payment scam at the shop.", "Confirms payment in the app."],
+            ["Shop 30", "No fraud reported", "Respondent did not report or observe a UPI fraud attempt.", "Would contact the bank if an unknown transaction appeared."]
+        ];
+
+        // Sample online fraud responses. These are also fictional examples.
+        var onlineData = [
+            ["Person 01", "Phishing link", "Received a message with a fake account-update link.", "Did not enter details after noticing the unusual website."],
+            ["Person 02", "Phishing link", "Received a parcel-delivery message asking for a small payment through a link.", "Link was not opened."],
+            ["Person 03", "Phishing link", "A message promised a reward and asked the user to submit personal details.", "Message was ignored."],
+            ["Person 04", "Phishing link", "Received an alert claiming that an account would be blocked unless details were updated.", "User checked through the official app instead."],
+            ["Person 05", "Phishing link", "A social media message directed the person to an unfamiliar login page.", "Did not enter the password."],
+            ["Person 06", "Fake customer-care call", "A caller pretended to be a bank support employee and asked for account information.", "Call was ended; official bank contact was used."],
+            ["Person 07", "Fake customer-care call", "A search result showed an unverified customer-care phone number.", "Person was advised to use the official website."],
+            ["Person 08", "Fake customer-care call", "A caller claiming to arrange a refund asked the person to follow payment instructions.", "Request was not followed."],
+            ["Person 09", "Fake customer-care call", "A fake courier support caller asked for details to release a parcel.", "Person did not share secret information."],
+            ["Person 10", "OTP / UPI PIN trick", "A caller asked for an OTP while claiming to verify a payment.", "OTP was not shared."],
+            ["Person 11", "OTP / UPI PIN trick", "A message said that a UPI PIN was needed to receive money.", "Person did not enter the PIN."],
+            ["Person 12", "OTP / UPI PIN trick", "Someone asked for a one-time code to process a refund.", "Request was rejected."],
+            ["Person 13", "OTP / UPI PIN trick", "A caller tried to make the person reveal a payment-app PIN.", "Call was disconnected."],
+            ["Person 14", "Online shopping fraud", "Paid a social media seller but the advertised product was not delivered.", "Person saved the payment reference and contacted the payment provider."],
+            ["Person 15", "Online shopping fraud", "An online seller requested payment outside the trusted marketplace.", "Person became suspicious and did not continue."],
+            ["Person 16", "Online shopping fraud", "A very low-price offer led to a payment request from an unknown seller.", "Payment was not made after checking the seller."],
+            ["Person 17", "Remote access app", "A caller asked the person to install a screen-sharing application to fix a payment issue.", "App was not installed."],
+            ["Person 18", "Remote access app", "A message encouraged installation of an unknown support application.", "Message was deleted."],
+            ["Person 19", "Job / task scam", "An online task offer promised easy earnings but later demanded a deposit.", "Person stopped before sending more money."],
+            ["Person 20", "No fraud reported", "Respondent did not report or observe an online payment fraud incident.", "Checks unknown links and uses official applications."]
+        ];
+
+        // This function adds the survey data to a table.
+        function showTable(data, tableId) {
+            var table = document.getElementById(tableId);
+            var rows = "";
+
+            for (var i = 0; i < data.length; i++) {
+                rows = rows + "<tr>";
+                rows = rows + "<td>" + data[i][0] + "</td>";
+                rows = rows + "<td>" + data[i][1] + "</td>";
+                rows = rows + "<td>" + data[i][2] + "</td>";
+                rows = rows + "<td>" + data[i][3] + "</td>";
+                rows = rows + "</tr>";
+            }
+
+            table.innerHTML = rows;
+        }
+
+        // This function counts the number of responses for each fraud type.
+        function showChart(data, chartId) {
+            var counts = {};
+
+            for (var i = 0; i < data.length; i++) {
+                var fraudType = data[i][1];
+
+                if (counts[fraudType] == undefined) {
+                    counts[fraudType] = 1;
+                } else {
+                    counts[fraudType] = counts[fraudType] + 1;
+                }
+            }
+
+            var maxCount = 0;
+            var types = Object.keys(counts);
+
+            for (var j = 0; j < types.length; j++) {
+                if (counts[types[j]] > maxCount) {
+                    maxCount = counts[types[j]];
+                }
+            }
+
+            var chart = document.getElementById(chartId);
+            var chartHTML = "";
+
+            for (var k = 0; k < types.length; k++) {
+                var name = types[k];
+                var number = counts[name];
+                var barWidth = (number / maxCount) * 100;
+
+                chartHTML = chartHTML + "<div class='chart-row'>";
+                chartHTML = chartHTML + "<div class='chart-label'><span>" + name + "</span><strong>" + number + "</strong></div>";
+                chartHTML = chartHTML + "<div class='chart-background'><div class='chart-bar' style='width:" + barWidth + "%'></div></div>";
+                chartHTML = chartHTML + "</div>";
+            }
+
+            chart.innerHTML = chartHTML;
+        }
+
+        // Display the sample data and charts when the website opens.
+        showTable(upiData, "upiRows");
+        showTable(onlineData, "onlineRows");
+        showChart(upiData, "upiChart");
+        showChart(onlineData, "onlineChart");
+    </script>
+
+<script>
+// Language text used by the website. English is the default language.
+var currentLanguage = "en";
+var originalText = new WeakMap();
+
+var pageWords = {
+    hi: {
+        "Language:": "भाषा:",
+        "UPI & ONLINE FRAUD STUDY": "UPI और ऑनलाइन धोखाधड़ी अध्ययन",
+        "Home": "होम",
+        "Shopkeeper Survey": "दुकानदार सर्वेक्षण",
+        "Online Survey": "ऑनलाइन सर्वेक्षण",
+        "Questions": "प्रश्न",
+        "Cyber Security Field Project": "साइबर सुरक्षा फील्ड प्रोजेक्ट",
+        "UPI and Online Payment Fraud Awareness": "UPI और ऑनलाइन भुगतान धोखाधड़ी के प्रति जागरूकता",
+        "Learn about common UPI and online payment frauds. This website explains some warning signs and basic safety steps for digital payment users.": "आम UPI और ऑनलाइन भुगतान धोखाधड़ी के बारे में जानें। यह वेबसाइट डिजिटल भुगतान करने वालों को धोखाधड़ी के संकेत और सुरक्षा के आसान तरीके बताती है।",
+        "View UPI Survey": "UPI सर्वेक्षण देखें",
+        "Interview Questions": "साक्षात्कार के प्रश्न",
+        "Shopkeeper sample records": "दुकानदारों के नमूना रिकॉर्ड",
+        "Public sample records": "लोगों के नमूना रिकॉर्ड",
+        "Total sample records": "कुल नमूना रिकॉर्ड",
+        "About this Project": "इस प्रोजेक्ट के बारे में",
+        "This project is about UPI and online payment fraud awareness. We want to understand common fraud methods faced or observed by shopkeepers and other people.": "यह प्रोजेक्ट UPI और ऑनलाइन भुगतान धोखाधड़ी के प्रति जागरूकता पर आधारित है। इसमें दुकानदारों और अन्य लोगों द्वारा सामना की गई या देखी गई आम धोखाधड़ी को समझने का प्रयास किया गया है।",
+        "Some topics included in this project are fake payment screenshots, QR code problems, collect request scams, phishing links and fake customer care calls.": "इस प्रोजेक्ट में नकली भुगतान स्क्रीनशॉट, QR कोड की समस्या, कलेक्ट रिक्वेस्ट धोखाधड़ी, फिशिंग लिंक और नकली कस्टमर केयर कॉल जैसे विषय शामिल हैं।",
+        "This is an awareness website. It does not connect to bank accounts or check real-time UPI payments.": "यह जागरूकता के लिए बनाई गई वेबसाइट है। यह बैंक खातों से कनेक्ट नहीं होती और न ही रियल-टाइम UPI भुगतान की जाँच करती है।",
+        "Common UPI Fraud Methods": "UPI धोखाधड़ी के आम तरीके",
+        "1. Fake Payment Screenshot": "1. नकली भुगतान स्क्रीनशॉट",
+        "A person may show an edited or old payment screenshot and say that the payment is completed. Check your own payment app before giving the goods.": "कोई व्यक्ति एडिट किया हुआ या पुराना भुगतान स्क्रीनशॉट दिखाकर भुगतान पूरा होने का दावा कर सकता है। सामान देने से पहले अपने भुगतान ऐप में पैसे आने की जाँच करें।",
+        "2. QR Code Replacement": "2. QR कोड बदलना",
+        "Someone may put another QR code over the original shop QR code. Always check the receiver name after scanning.": "कोई व्यक्ति दुकान के असली QR कोड के ऊपर दूसरा QR कोड लगा सकता है। स्कैन करने के बाद हमेशा प्राप्तकर्ता का नाम जाँचें।",
+        "3. Collect Request Scam": "3. कलेक्ट रिक्वेस्ट धोखाधड़ी",
+        "A person may send a payment request and say that it is for receiving money. Read the request before entering your UPI PIN.": "कोई व्यक्ति पैसे प्राप्त करने के नाम पर भुगतान अनुरोध भेज सकता है। UPI PIN डालने से पहले अनुरोध को ध्यान से पढ़ें।",
+        "Common Online Fraud Methods": "ऑनलाइन धोखाधड़ी के आम तरीके",
+        "1. Phishing Link": "1. फिशिंग लिंक",
+        "Fake messages may contain links for KYC updates, rewards or account updates. Do not enter personal details on unknown websites.": "नकली संदेशों में KYC अपडेट, इनाम या अकाउंट अपडेट के लिंक हो सकते हैं। अनजान वेबसाइट पर अपनी निजी जानकारी न डालें।",
+        "2. Fake Customer Care": "2. नकली कस्टमर केयर",
+        "Some callers pretend to be bank or courier staff and ask for private information. Use official customer care numbers only.": "कुछ कॉल करने वाले बैंक या कुरियर कर्मचारी बनकर निजी जानकारी माँगते हैं। केवल आधिकारिक कस्टमर केयर नंबर का उपयोग करें।",
+        "3. Remote Access App": "3. रिमोट एक्सेस ऐप",
+        "Unknown callers may ask you to install an app or share your mobile screen. Do not give remote access to unknown people.": "अनजान कॉल करने वाले ऐप इंस्टॉल करने या मोबाइल स्क्रीन शेयर करने के लिए कह सकते हैं। अनजान लोगों को रिमोट एक्सेस न दें।",
+        "Basic Safety Tips": "सुरक्षा के आसान तरीके",
+        "Never share your UPI PIN or OTP with anyone.": "अपना UPI PIN या OTP किसी के साथ साझा न करें।",
+        "You do not need to enter your UPI PIN to receive money.": "पैसे प्राप्त करने के लिए UPI PIN डालने की जरूरत नहीं होती।",
+        "Check the receiver name before making a UPI payment.": "UPI भुगतान करने से पहले प्राप्तकर्ता का नाम जाँचें।",
+        "Shopkeepers should check the payment in their own app or bank account.": "दुकानदारों को अपने ऐप या बैंक खाते में भुगतान की पुष्टि करनी चाहिए।",
+        "Do not click unknown payment or KYC links.": "अनजान भुगतान या KYC लिंक पर क्लिक न करें।",
+        "Do not install unknown screen-sharing applications.": "अनजान स्क्रीन-शेयरिंग ऐप इंस्टॉल न करें।",
+        "For cyber financial fraud, contact helpline 1930 or visit cybercrime.gov.in.": "वित्तीय साइबर धोखाधड़ी होने पर हेल्पलाइन 1930 पर संपर्क करें या cybercrime.gov.in पर जाएँ।",
+        "UPI Fraud – Shopkeeper Survey": "UPI धोखाधड़ी – दुकानदार सर्वेक्षण",
+        "30 sample records for local shopkeepers.": "स्थानीय दुकानदारों के 30 नमूना रिकॉर्ड।",
+        "Survey Summary": "सर्वेक्षण सारांश",
+        "Total sample respondents:": "कुल नमूना उत्तरदाता:",
+        "The examples include fake screenshots, fake confirmations, QR code issues, collect requests and other cases.": "इन उदाहरणों में नकली स्क्रीनशॉट, नकली पुष्टि, QR कोड की समस्या, कलेक्ट रिक्वेस्ट और अन्य मामले शामिल हैं।",
+        "Fraud Types in Sample Data": "नमूना डेटा में धोखाधड़ी के प्रकार",
+        "30 Shopkeeper Sample Responses": "दुकानदारों के 30 नमूना जवाब",
+        "ID": "आईडी",
+        "Fraud Type": "धोखाधड़ी का प्रकार",
+        "Example Response": "उदाहरण जवाब",
+        "Outcome": "परिणाम",
+        "Online Fraud – Public Survey": "ऑनलाइन धोखाधड़ी – सार्वजनिक सर्वेक्षण",
+        "20 sample records for other people.": "अन्य लोगों के 20 नमूना रिकॉर्ड।",
+        "The examples include phishing links, fake customer care calls, OTP tricks, shopping fraud and other cases.": "इन उदाहरणों में फिशिंग लिंक, नकली कस्टमर केयर कॉल, OTP से जुड़ी चालें, ऑनलाइन खरीदारी में धोखाधड़ी और अन्य मामले शामिल हैं।",
+        "20 Public Sample Responses": "लोगों के 20 नमूना जवाब",
+        "Action / Outcome": "कार्रवाई / परिणाम",
+        "Interview Questions": "साक्षात्कार के प्रश्न",
+        "These questions can be used during the field visits.": "इन प्रश्नों का उपयोग फील्ड विजिट के दौरान किया जा सकता है।",
+        "Do not ask anyone for their UPI PIN, OTP, password or full bank details. Do not publish personal information on this website.": "किसी से भी UPI PIN, OTP, पासवर्ड या बैंक की पूरी जानकारी न पूछें। इस वेबसाइट पर किसी की निजी जानकारी प्रकाशित न करें।",
+        "UPI Fraud – 10 Questions for Shopkeepers": "UPI धोखाधड़ी – दुकानदारों के लिए 10 प्रश्न",
+        "Have you ever faced or seen any UPI payment fraud at your shop?": "क्या आपने अपनी दुकान पर कभी UPI भुगतान धोखाधड़ी का सामना किया है या उसे देखा है?",
+        "Yes / No / Observed only": "हाँ / नहीं / केवल देखा है",
+        "Which type of UPI fraud have you faced or seen?": "आपने किस प्रकार की UPI धोखाधड़ी का सामना किया है या देखी है?",
+        "Fake screenshot / Fake confirmation / QR code issue / Collect request / Other": "नकली स्क्रीनशॉट / नकली पुष्टि / QR कोड की समस्या / कलेक्ट रिक्वेस्ट / अन्य",
+        "Has anyone shown you a payment screenshot without sending the money?": "क्या किसी ने पैसे भेजे बिना आपको भुगतान का स्क्रीनशॉट दिखाया है?",
+        "Yes / No": "हाँ / नहीं",
+        "Has anyone changed or covered your shop QR code?": "क्या किसी ने आपकी दुकान का QR कोड बदला है या उसे ढका है?",
+        "Yes / No / Not sure": "हाँ / नहीं / पता नहीं",
+        "Have you received a UPI collect request from an unknown person?": "क्या आपको किसी अनजान व्यक्ति से UPI कलेक्ट रिक्वेस्ट मिली है?",
+        "How do you check that a customer's payment is received?": "आप कैसे जाँचते हैं कि ग्राहक का भुगतान प्राप्त हुआ है?",
+        "Payment app / Bank SMS / Bank statement / Soundbox / Other": "पेमेंट ऐप / बैंक SMS / बैंक स्टेटमेंट / साउंडबॉक्स / अन्य",
+        "Do you check the receiver name or UPI ID before accepting a payment?": "क्या आप भुगतान स्वीकार करने से पहले प्राप्तकर्ता का नाम या UPI ID जाँचते हैं?",
+        "Always / Sometimes / Never": "हमेशा / कभी-कभी / कभी नहीं",
+        "Have you lost money or goods because of a payment fraud attempt?": "क्या भुगतान धोखाधड़ी के प्रयास के कारण आपका पैसा या सामान खोया है?",
+        "Yes / No / Prefer not to say": "हाँ / नहीं / बताना नहीं चाहते",
+        "What did you do after noticing a suspicious payment?": "संदिग्ध भुगतान देखने के बाद आपने क्या किया?",
+        "Write a short answer.": "संक्षेप में जवाब लिखें।",
+        "What information would help you avoid UPI fraud?": "UPI धोखाधड़ी से बचने के लिए कौन-सी जानकारी मददगार होगी?",
+        "Online Fraud – 10 Questions for People": "ऑनलाइन धोखाधड़ी – लोगों के लिए 10 प्रश्न",
+        "Have you or someone you know faced or seen an online payment fraud?": "क्या आपने या आपके किसी परिचित ने ऑनलाइन भुगतान धोखाधड़ी का सामना किया है या उसे देखा है?",
+        "Which type of online fraud did you face or see?": "आपने किस प्रकार की ऑनलाइन धोखाधड़ी का सामना किया है या देखी है?",
+        "Phishing link / Fake customer care / OTP trick / Shopping fraud / Remote access / Other": "फिशिंग लिंक / नकली कस्टमर केयर / OTP की चाल / खरीदारी में धोखाधड़ी / रिमोट एक्सेस / अन्य",
+        "Have you received a suspicious SMS, WhatsApp message or email link?": "क्या आपको कोई संदिग्ध SMS, WhatsApp संदेश या ईमेल लिंक मिला है?",
+        "Has anyone called you pretending to be bank or customer-care staff?": "क्या किसी ने बैंक या कस्टमर केयर कर्मचारी बनकर आपको कॉल किया है?",
+        "Has anyone asked you to share an OTP, UPI PIN or password?": "क्या किसी ने आपसे OTP, UPI PIN या पासवर्ड साझा करने को कहा है?",
+        "Yes / No. Do not write the actual code.": "हाँ / नहीं। असली कोड न लिखें।",
+        "Has anyone asked you to install an app to solve a payment problem?": "क्या किसी ने भुगतान की समस्या हल करने के लिए ऐप इंस्टॉल करने को कहा है?",
+        "Have you paid an online seller but not received the product?": "क्या आपने ऑनलाइन विक्रेता को पैसे दिए लेकिन उत्पाद नहीं मिला?",
+        "How do you check whether a payment link or website is genuine?": "आप कैसे जाँचते हैं कि भुगतान लिंक या वेबसाइट असली है?",
+        "Do you know where to report an online financial fraud?": "क्या आपको पता है कि ऑनलाइन वित्तीय धोखाधड़ी की रिपोर्ट कहाँ करनी है?",
+        "What information would help you avoid online fraud?": "ऑनलाइन धोखाधड़ी से बचने के लिए कौन-सी जानकारी मददगार होगी?",
+        "Print Questions": "प्रश्न प्रिंट करें",
+        "Back to Home": "होम पर वापस जाएँ",
+        "S.Y. B.Sc. Cyber Security | Group 9 | Academic Year 2026–27": "एस.वाई. बी.एससी. साइबर सिक्योरिटी | ग्रुप 9 | शैक्षणिक वर्ष 2026–27",
+        "Haribhai V. Desai College of Arts, Science and Commerce, Pune": "हरिभाई वी. देसाई कॉलेज ऑफ आर्ट्स, साइंस एंड कॉमर्स, पुणे",
+        "Educational awareness project only. This website does not connect to banks or detect fraud automatically.": "यह केवल शैक्षणिक जागरूकता प्रोजेक्ट है। यह वेबसाइट बैंकों से कनेक्ट नहीं होती और अपने आप धोखाधड़ी का पता नहीं लगाती।",
+        "Important: Demo data": "महत्वपूर्ण: डेमो डेटा",
+        "The 30 shopkeeper and 20 public responses on this website are fictional examples. They are only included to show how survey information can be displayed. Replace them with the real answers collected during your field visits.": "इस वेबसाइट पर 30 दुकानदारों और 20 लोगों के जवाब केवल काल्पनिक उदाहरण हैं। इन्हें सिर्फ सर्वेक्षण की जानकारी दिखाने के लिए रखा गया है। फील्ड विजिट के दौरान मिले वास्तविक जवाबों से इन्हें बदलें।",
+        "These are fictional demo responses. Replace them with actual answers collected from your interviews.": "ये काल्पनिक डेमो जवाब हैं। इन्हें अपने साक्षात्कारों से मिले वास्तविक जवाबों से बदलें।",
+        "These are fictional demo responses. Replace them with answers collected from your actual shopkeeper interviews.": "ये काल्पनिक डेमो जवाब हैं। इन्हें दुकानदारों के वास्तविक साक्षात्कारों से मिले जवाबों से बदलें।",
+        "Haribhai V. Desai College of Arts, Science and Commerce, Pune | S.Y. B.Sc. Cyber Security | Group 9": "हरिभाई वी. देसाई कॉलेज ऑफ आर्ट्स, साइंस एंड कॉमर्स, पुणे | एस.वाई. बी.एससी. साइबर सिक्योरिटी | ग्रुप 9",
+        "UPI and Online Payment Fraud Study": "UPI और ऑनलाइन भुगतान धोखाधड़ी अध्ययन"
+    },
+    mr: {
+        "Language:": "भाषा:",
+        "UPI & ONLINE FRAUD STUDY": "UPI आणि ऑनलाइन फसवणूक अभ्यास",
+        "Home": "मुख्यपृष्ठ",
+        "Shopkeeper Survey": "दुकानदार सर्वेक्षण",
+        "Online Survey": "ऑनलाइन सर्वेक्षण",
+        "Questions": "प्रश्न",
+        "Cyber Security Field Project": "सायबर सुरक्षा फील्ड प्रोजेक्ट",
+        "UPI and Online Payment Fraud Awareness": "UPI आणि ऑनलाइन पेमेंट फसवणूक जनजागृती",
+        "Learn about common UPI and online payment frauds. This website explains some warning signs and basic safety steps for digital payment users.": "UPI आणि ऑनलाइन पेमेंटमधील सामान्य फसवणुकीबद्दल जाणून घ्या. ही वेबसाइट डिजिटल पेमेंट वापरणाऱ्यांना धोक्याची लक्षणे आणि सुरक्षिततेचे सोपे उपाय सांगते.",
+        "View UPI Survey": "UPI सर्वेक्षण पहा",
+        "Interview Questions": "मुलाखतीचे प्रश्न",
+        "Shopkeeper sample records": "दुकानदारांचे नमुना रेकॉर्ड",
+        "Public sample records": "इतर लोकांचे नमुना रेकॉर्ड",
+        "Total sample records": "एकूण नमुना रेकॉर्ड",
+        "About this Project": "या प्रोजेक्टबद्दल",
+        "This project is about UPI and online payment fraud awareness. We want to understand common fraud methods faced or observed by shopkeepers and other people.": "हा प्रोजेक्ट UPI आणि ऑनलाइन पेमेंट फसवणुकीबद्दल जनजागृती करण्यासाठी आहे. दुकानदार आणि इतर लोकांनी अनुभवलेल्या किंवा पाहिलेल्या सामान्य फसवणुकीचे प्रकार समजून घेणे हा याचा उद्देश आहे.",
+        "Some topics included in this project are fake payment screenshots, QR code problems, collect request scams, phishing links and fake customer care calls.": "या प्रोजेक्टमध्ये बनावट पेमेंट स्क्रीनशॉट, QR कोडमधील समस्या, कलेक्ट रिक्वेस्ट फसवणूक, फिशिंग लिंक आणि बनावट कस्टमर केअर कॉल यांसारखे विषय आहेत.",
+        "This is an awareness website. It does not connect to bank accounts or check real-time UPI payments.": "ही जनजागृतीसाठी तयार केलेली वेबसाइट आहे. ती बँक खात्यांशी जोडलेली नाही आणि रिअल-टाइम UPI पेमेंट तपासत नाही.",
+        "Common UPI Fraud Methods": "UPI फसवणुकीचे सामान्य प्रकार",
+        "1. Fake Payment Screenshot": "1. बनावट पेमेंट स्क्रीनशॉट",
+        "A person may show an edited or old payment screenshot and say that the payment is completed. Check your own payment app before giving the goods.": "एखादी व्यक्ती बदललेला किंवा जुना पेमेंट स्क्रीनशॉट दाखवून पेमेंट झाले असे सांगू शकते. वस्तू देण्यापूर्वी स्वतःच्या पेमेंट अॅपमध्ये पैसे जमा झाले आहेत का ते तपासा.",
+        "2. QR Code Replacement": "2. QR कोड बदलणे",
+        "Someone may put another QR code over the original shop QR code. Always check the receiver name after scanning.": "कोणी दुकानाच्या मूळ QR कोडवर दुसरा QR कोड लावू शकतो. स्कॅन केल्यानंतर पैसे घेणाऱ्याचे नाव नेहमी तपासा.",
+        "3. Collect Request Scam": "3. कलेक्ट रिक्वेस्ट फसवणूक",
+        "A person may send a payment request and say that it is for receiving money. Read the request before entering your UPI PIN.": "एखादी व्यक्ती पैसे मिळवण्यासाठी पेमेंट रिक्वेस्ट पाठवत असल्याचे सांगू शकते. UPI PIN टाकण्यापूर्वी रिक्वेस्ट नीट वाचा.",
+        "Common Online Fraud Methods": "ऑनलाइन फसवणुकीचे सामान्य प्रकार",
+        "1. Phishing Link": "1. फिशिंग लिंक",
+        "Fake messages may contain links for KYC updates, rewards or account updates. Do not enter personal details on unknown websites.": "बनावट संदेशांमध्ये KYC अपडेट, बक्षीस किंवा खाते अपडेट करण्यासाठी लिंक असू शकतात. अनोळखी वेबसाइटवर वैयक्तिक माहिती टाकू नका.",
+        "2. Fake Customer Care": "2. बनावट कस्टमर केअर",
+        "Some callers pretend to be bank or courier staff and ask for private information. Use official customer care numbers only.": "काही कॉल करणारे बँक किंवा कुरिअर कर्मचारी असल्याचे भासवून वैयक्तिक माहिती विचारतात. फक्त अधिकृत कस्टमर केअर क्रमांक वापरा.",
+        "3. Remote Access App": "3. रिमोट अॅक्सेस अॅप",
+        "Unknown callers may ask you to install an app or share your mobile screen. Do not give remote access to unknown people.": "अनोळखी कॉल करणारे अॅप इन्स्टॉल करण्यास किंवा मोबाईल स्क्रीन शेअर करण्यास सांगू शकतात. अनोळखी व्यक्तींना रिमोट अॅक्सेस देऊ नका.",
+        "Basic Safety Tips": "सुरक्षिततेचे सोपे उपाय",
+        "Never share your UPI PIN or OTP with anyone.": "तुमचा UPI PIN किंवा OTP कोणालाही सांगू नका.",
+        "You do not need to enter your UPI PIN to receive money.": "पैसे मिळवण्यासाठी UPI PIN टाकण्याची गरज नसते.",
+        "Check the receiver name before making a UPI payment.": "UPI पेमेंट करण्यापूर्वी पैसे घेणाऱ्याचे नाव तपासा.",
+        "Shopkeepers should check the payment in their own app or bank account.": "दुकानदारांनी स्वतःच्या अॅपमध्ये किंवा बँक खात्यात पेमेंट जमा झाले आहे का ते तपासावे.",
+        "Do not click unknown payment or KYC links.": "अनोळखी पेमेंट किंवा KYC लिंकवर क्लिक करू नका.",
+        "Do not install unknown screen-sharing applications.": "अनोळखी स्क्रीन-शेअरिंग अॅप्स इन्स्टॉल करू नका.",
+        "For cyber financial fraud, contact helpline 1930 or visit cybercrime.gov.in.": "आर्थिक सायबर फसवणूक झाल्यास 1930 हेल्पलाइनवर संपर्क करा किंवा cybercrime.gov.in ला भेट द्या.",
+        "UPI Fraud – Shopkeeper Survey": "UPI फसवणूक – दुकानदार सर्वेक्षण",
+        "30 sample records for local shopkeepers.": "स्थानिक दुकानदारांचे 30 नमुना रेकॉर्ड.",
+        "Survey Summary": "सर्वेक्षणाचा सारांश",
+        "Total sample respondents:": "एकूण नमुना प्रतिसादक:",
+        "The examples include fake screenshots, fake confirmations, QR code issues, collect requests and other cases.": "या उदाहरणांमध्ये बनावट स्क्रीनशॉट, बनावट पेमेंट पुष्टी, QR कोड समस्या, कलेक्ट रिक्वेस्ट आणि इतर प्रकार आहेत.",
+        "Fraud Types in Sample Data": "नमुना डेटामधील फसवणुकीचे प्रकार",
+        "30 Shopkeeper Sample Responses": "दुकानदारांचे 30 नमुना प्रतिसाद",
+        "ID": "आयडी",
+        "Fraud Type": "फसवणुकीचा प्रकार",
+        "Example Response": "नमुना प्रतिसाद",
+        "Outcome": "परिणाम",
+        "Online Fraud – Public Survey": "ऑनलाइन फसवणूक – सार्वजनिक सर्वेक्षण",
+        "20 sample records for other people.": "इतर लोकांचे 20 नमुना रेकॉर्ड.",
+        "The examples include phishing links, fake customer care calls, OTP tricks, shopping fraud and other cases.": "या उदाहरणांमध्ये फिशिंग लिंक, बनावट कस्टमर केअर कॉल, OTP संबंधित युक्त्या, ऑनलाइन खरेदीतील फसवणूक आणि इतर प्रकार आहेत.",
+        "20 Public Sample Responses": "लोकांचे 20 नमुना प्रतिसाद",
+        "Action / Outcome": "कृती / परिणाम",
+        "These questions can be used during the field visits.": "फील्ड व्हिजिटदरम्यान हे प्रश्न विचारता येतील.",
+        "Do not ask anyone for their UPI PIN, OTP, password or full bank details. Do not publish personal information on this website.": "कोणालाही UPI PIN, OTP, पासवर्ड किंवा बँकेची संपूर्ण माहिती विचारू नका. या वेबसाइटवर वैयक्तिक माहिती प्रकाशित करू नका.",
+        "UPI Fraud – 10 Questions for Shopkeepers": "UPI फसवणूक – दुकानदारांसाठी 10 प्रश्न",
+        "Have you ever faced or seen any UPI payment fraud at your shop?": "तुमच्या दुकानात UPI पेमेंट फसवणूक अनुभवली आहे किंवा पाहिली आहे का?",
+        "Yes / No / Observed only": "होय / नाही / फक्त पाहिली आहे",
+        "Which type of UPI fraud have you faced or seen?": "तुम्ही कोणत्या प्रकारची UPI फसवणूक अनुभवली आहे किंवा पाहिली आहे?",
+        "Fake screenshot / Fake confirmation / QR code issue / Collect request / Other": "बनावट स्क्रीनशॉट / बनावट पुष्टी / QR कोड समस्या / कलेक्ट रिक्वेस्ट / इतर",
+        "Has anyone shown you a payment screenshot without sending the money?": "पैसे न पाठवता कोणीतरी तुम्हाला पेमेंटचा स्क्रीनशॉट दाखवला आहे का?",
+        "Yes / No": "होय / नाही",
+        "Has anyone changed or covered your shop QR code?": "कोणी तुमच्या दुकानाचा QR कोड बदलला आहे किंवा झाकला आहे का?",
+        "Yes / No / Not sure": "होय / नाही / खात्री नाही",
+        "Have you received a UPI collect request from an unknown person?": "अनोळखी व्यक्तीकडून UPI कलेक्ट रिक्वेस्ट आली आहे का?",
+        "How do you check that a customer's payment is received?": "ग्राहकाचे पेमेंट मिळाले आहे हे तुम्ही कसे तपासता?",
+        "Payment app / Bank SMS / Bank statement / Soundbox / Other": "पेमेंट अॅप / बँक SMS / बँक स्टेटमेंट / साउंडबॉक्स / इतर",
+        "Do you check the receiver name or UPI ID before accepting a payment?": "पेमेंट स्वीकारण्यापूर्वी पैसे घेणाऱ्याचे नाव किंवा UPI ID तपासता का?",
+        "Always / Sometimes / Never": "नेहमी / कधी कधी / कधीच नाही",
+        "Have you lost money or goods because of a payment fraud attempt?": "पेमेंट फसवणुकीच्या प्रयत्नामुळे तुमचे पैसे किंवा वस्तू गमावल्या आहेत का?",
+        "Yes / No / Prefer not to say": "होय / नाही / सांगू इच्छित नाही",
+        "What did you do after noticing a suspicious payment?": "संशयास्पद पेमेंट लक्षात आल्यानंतर तुम्ही काय केले?",
+        "Write a short answer.": "थोडक्यात उत्तर लिहा.",
+        "What information would help you avoid UPI fraud?": "UPI फसवणूक टाळण्यासाठी कोणती माहिती उपयुक्त ठरेल?",
+        "Online Fraud – 10 Questions for People": "ऑनलाइन फसवणूक – लोकांसाठी 10 प्रश्न",
+        "Have you or someone you know faced or seen an online payment fraud?": "तुम्ही किंवा तुमच्या ओळखीच्या व्यक्तीने ऑनलाइन पेमेंट फसवणूक अनुभवली आहे किंवा पाहिली आहे का?",
+        "Which type of online fraud did you face or see?": "तुम्ही कोणत्या प्रकारची ऑनलाइन फसवणूक अनुभवली आहे किंवा पाहिली आहे?",
+        "Phishing link / Fake customer care / OTP trick / Shopping fraud / Remote access / Other": "फिशिंग लिंक / बनावट कस्टमर केअर / OTP युक्ती / खरेदीतील फसवणूक / रिमोट अॅक्सेस / इतर",
+        "Have you received a suspicious SMS, WhatsApp message or email link?": "तुम्हाला संशयास्पद SMS, WhatsApp संदेश किंवा ईमेल लिंक मिळाली आहे का?",
+        "Has anyone called you pretending to be bank or customer-care staff?": "कोणी बँक किंवा कस्टमर केअर कर्मचारी असल्याचे सांगून तुम्हाला फोन केला आहे का?",
+        "Has anyone asked you to share an OTP, UPI PIN or password?": "कोणी तुम्हाला OTP, UPI PIN किंवा पासवर्ड सांगण्यास सांगितले आहे का?",
+        "Yes / No. Do not write the actual code.": "होय / नाही. खरा कोड लिहू नका.",
+        "Has anyone asked you to install an app to solve a payment problem?": "पेमेंटची समस्या सोडवण्यासाठी कोणी तुम्हाला अॅप इन्स्टॉल करण्यास सांगितले आहे का?",
+        "Have you paid an online seller but not received the product?": "ऑनलाइन विक्रेत्याला पैसे देऊनही तुम्हाला वस्तू मिळाली नाही का?",
+        "How do you check whether a payment link or website is genuine?": "पेमेंट लिंक किंवा वेबसाइट खरी आहे की नाही हे तुम्ही कसे तपासता?",
+        "Do you know where to report an online financial fraud?": "ऑनलाइन आर्थिक फसवणुकीची तक्रार कुठे करायची हे तुम्हाला माहिती आहे का?",
+        "What information would help you avoid online fraud?": "ऑनलाइन फसवणूक टाळण्यासाठी कोणती माहिती उपयुक्त ठरेल?",
+        "Print Questions": "प्रश्न प्रिंट करा",
+        "Back to Home": "मुख्यपृष्ठावर परत जा",
+        "S.Y. B.Sc. Cyber Security | Group 9 | Academic Year 2026–27": "एस.वाय. बी.एस्सी. सायबर सिक्युरिटी | ग्रुप 9 | शैक्षणिक वर्ष 2026–27",
+        "Haribhai V. Desai College of Arts, Science and Commerce, Pune": "हरिभाई व्ही. देसाई कॉलेज ऑफ आर्ट्स, सायन्स अँड कॉमर्स, पुणे",
+        "Educational awareness project only. This website does not connect to banks or detect fraud automatically.": "हा केवळ शैक्षणिक जनजागृती प्रोजेक्ट आहे. ही वेबसाइट बँकांशी जोडलेली नाही आणि आपोआप फसवणूक शोधत नाही.",
+        "Important: Demo data": "महत्त्वाचे: डेमो डेटा",
+        "The 30 shopkeeper and 20 public responses on this website are fictional examples. They are only included to show how survey information can be displayed. Replace them with the real answers collected during your field visits.": "या वेबसाइटवरील 30 दुकानदारांचे आणि 20 लोकांचे प्रतिसाद काल्पनिक उदाहरणे आहेत. सर्वेक्षणाची माहिती कशी दाखवता येते हे दाखवण्यासाठी ती दिली आहेत. फील्ड व्हिजिटमध्ये मिळालेल्या प्रत्यक्ष उत्तरांनी ती बदला.",
+        "These are fictional demo responses. Replace them with actual answers collected from your interviews.": "हे काल्पनिक डेमो प्रतिसाद आहेत. तुमच्या मुलाखतींमधून मिळालेल्या प्रत्यक्ष उत्तरांनी ते बदला.",
+        "These are fictional demo responses. Replace them with answers collected from your actual shopkeeper interviews.": "हे काल्पनिक डेमो प्रतिसाद आहेत. दुकानदारांच्या प्रत्यक्ष मुलाखतींमधून मिळालेल्या उत्तरांनी ते बदला.",
+        "Haribhai V. Desai College of Arts, Science and Commerce, Pune | S.Y. B.Sc. Cyber Security | Group 9": "हरिभाई व्ही. देसाई कॉलेज ऑफ आर्ट्स, सायन्स अँड कॉमर्स, पुणे | एस.वाय. बी.एस्सी. सायबर सिक्युरिटी | ग्रुप 9",
+        "UPI and Online Payment Fraud Study": "UPI आणि ऑनलाइन पेमेंट फसवणूक अभ्यास"
+    }
+};
+
+// Translated fraud category names used in the charts and tables.
+var typeWords = {
+    hi: {
+        "Fake payment screenshot": "नकली भुगतान स्क्रीनशॉट",
+        "Fake voice / confirmation": "नकली आवाज़ / पुष्टि",
+        "QR code issue": "QR कोड की समस्या",
+        "Collect request scam": "कलेक्ट रिक्वेस्ट धोखाधड़ी",
+        "Wrong UPI ID / transfer": "गलत UPI ID / ट्रांसफर",
+        "No fraud reported": "कोई धोखाधड़ी रिपोर्ट नहीं",
+        "Phishing link": "फिशिंग लिंक",
+        "Fake customer-care call": "नकली कस्टमर केयर कॉल",
+        "OTP / UPI PIN trick": "OTP / UPI PIN की चाल",
+        "Online shopping fraud": "ऑनलाइन खरीदारी धोखाधड़ी",
+        "Remote access app": "रिमोट एक्सेस ऐप",
+        "Job / task scam": "नौकरी / टास्क धोखाधड़ी"
+    },
+    mr: {
+        "Fake payment screenshot": "बनावट पेमेंट स्क्रीनशॉट",
+        "Fake voice / confirmation": "बनावट आवाज / पुष्टी",
+        "QR code issue": "QR कोडची समस्या",
+        "Collect request scam": "कलेक्ट रिक्वेस्ट फसवणूक",
+        "Wrong UPI ID / transfer": "चुकीचा UPI ID / ट्रान्सफर",
+        "No fraud reported": "फसवणूक नोंदवली नाही",
+        "Phishing link": "फिशिंग लिंक",
+        "Fake customer-care call": "बनावट कस्टमर केअर कॉल",
+        "OTP / UPI PIN trick": "OTP / UPI PIN ची युक्ती",
+        "Online shopping fraud": "ऑनलाइन खरेदीतील फसवणूक",
+        "Remote access app": "रिमोट अॅक्सेस अॅप",
+        "Job / task scam": "नोकरी / टास्क फसवणूक"
+    }
+};
+
+// General translation for sample response details and outcomes.
+// The respondent IDs remain unchanged.
+var sampleText = {
+    hi: {
+        upi: [
+            ["ग्राहक ने भुगतान का स्क्रीनशॉट दिखाया, लेकिन दुकान के ऐप में पैसे जमा नहीं हुए।", "सामान देने से पहले दुकानदार ने ऐप में जाँच की।"],
+            ["खरीदार ने पुरानी भुगतान तस्वीर दिखाई और नेटवर्क धीमा होने की बात कही।", "दोबारा जाँच करने पर कोई भुगतान नहीं मिला।"],
+            ["सफल भुगतान के प्रमाण के रूप में काटा हुआ स्क्रीनशॉट दिखाया गया।", "दुकानदार ने ऐप में पुष्टि होने तक इंतज़ार किया।"],
+            ["स्क्रीनशॉट में दिया गया ट्रांज़ैक्शन नंबर दुकान के रिकॉर्ड से मेल नहीं खाता था।", "संदिग्ध भुगतान स्वीकार नहीं किया गया।"],
+            ["ग्राहक ने पिछली खरीदारी का स्क्रीनशॉट दोबारा दिखाया।", "दुकानदार ने हाल की ट्रांज़ैक्शन हिस्ट्री देखी।"],
+            ["नकली पेंडिंग पेमेंट स्क्रीन को सफल भुगतान बताया गया।", "भुगतान की पुष्टि होने तक सामान नहीं दिया गया।"],
+            ["मैसेजिंग ऐप पर भुगतान की तस्वीर भेजी गई, लेकिन खाते में पैसे नहीं आए।", "दुकानदार ने केवल तस्वीर पर भरोसा नहीं किया।"],
+            ["खाते की जाँच किए बिना स्क्रीनशॉट को स्वीकार कर लिया गया।", "यह संभावित नुकसान का उदाहरण है; हर भुगतान की जाँच करें।"],
+            ["कॉल करने वाले ने ऑडियो पुष्टि पर भरोसा करने को कहा।", "दुकानदार ने पेमेंट ऐप में ट्रांज़ैक्शन जाँचा।"],
+            ["ग्राहक ने पैसे भेजने का ऑडियो संदेश चलाया।", "उस समय कोई संबंधित भुगतान दिखाई नहीं दिया।"],
+            ["कॉल के माध्यम से जल्दी सामान देने का दबाव बनाया गया।", "दुकानदार ने खाते में भुगतान आने का इंतज़ार किया।"],
+            ["ट्रांज़ैक्शन जाँचे बिना ऑडियो को भुगतान का प्रमाण माना गया।", "ऐप में भुगतान जाँचना ज़रूरी है।"],
+            ["दुकान के QR पर लगाए गए स्टिकर से अलग प्राप्तकर्ता का नाम दिखा।", "ग्राहकों के उपयोग से पहले QR की जाँच की गई।"],
+            ["स्कैन करने के बाद दिखा UPI ID दुकान के खाते से मेल नहीं खाता था।", "भुगतान रद्द करके QR की जाँच की गई।"],
+            ["मूल QR के पास एक अनजान प्रिंटेड QR मिला।", "दुकानदार ने अनजान QR हटा दिया।"],
+            ["ग्राहक ने बताया कि प्राप्तकर्ता का नाम दुकान के नाम से अलग था।", "दुकानदार ने QR दोबारा जाँचा।"],
+            ["एक अनजान व्यक्ति ने पैसे मिलने के नाम पर कलेक्ट रिक्वेस्ट भेजी।", "रिक्वेस्ट अस्वीकार कर दी गई।"],
+            ["रिफंड के नाम पर भुगतान अनुरोध स्वीकार करने को कहा गया।", "दुकानदार ने अनुरोध स्वीकार नहीं किया।"],
+            ["खरीदार ने कलेक्ट रिक्वेस्ट के बाद UPI PIN डालने को कहा।", "रिक्वेस्ट रद्द कर दी गई।"],
+            ["संदेश में कहा गया कि अनुरोध स्वीकार करने से पैसे खाते में आएँगे।", "दुकानदार ने अनुरोध जाँचा और अस्वीकार किया।"],
+            ["खरीदारी के दौरान अनजान UPI खाते से कलेक्ट रिक्वेस्ट आई।", "दुकानदार ने अनजान अनुरोध स्वीकार नहीं किया।"],
+            ["ग्राहक ने मिलते-जुलते UPI ID पर पैसे भेज दिए।", "दुकान को भुगतान नहीं मिला; ग्राहक को बैंक या ऐप से संपर्क करने को कहा गया।"],
+            ["UPI ID ध्यान से न जाँचने के कारण गलत खाते में भुगतान हुआ।", "भुगतान से पहले प्राप्तकर्ता का विवरण जाँचना चाहिए।"],
+            ["उत्तरदाता ने UPI धोखाधड़ी की कोई घटना नहीं बताई।", "वह पेमेंट ऐप में भुगतान की पुष्टि करता है।"],
+            ["उत्तरदाता ने किसी UPI धोखाधड़ी का अनुभव नहीं बताया।", "वह बिक्री पूरी करने से पहले भुगतान नोटिफिकेशन देखता है।"],
+            ["इस नमूना जवाब में कोई UPI धोखाधड़ी नहीं बताई गई।", "दुकान का QR कोड दिखाई देने वाली जगह पर रखा जाता है।"],
+            ["उत्तरदाता ने कोई संदिग्ध UPI भुगतान नहीं देखा।", "शक होने पर ट्रांज़ैक्शन हिस्ट्री देखता है।"],
+            ["उत्तरदाता ने कोई धोखाधड़ी की घटना नहीं बताई।", "वह अपना UPI PIN किसी को नहीं बताता।"],
+            ["उत्तरदाता ने दुकान पर भुगतान धोखाधड़ी का अनुभव नहीं बताया।", "वह ऐप में भुगतान की पुष्टि करता है।"],
+            ["उत्तरदाता ने कोई UPI धोखाधड़ी का प्रयास नहीं देखा।", "अनजान ट्रांज़ैक्शन दिखने पर बैंक से संपर्क करेगा।"]
+        ],
+        online: [
+            ["खाते का अपडेट करने के नाम पर नकली लिंक वाला संदेश मिला।", "संदिग्ध वेबसाइट देखकर जानकारी दर्ज नहीं की।"],
+            ["पार्सल डिलीवरी के नाम पर लिंक से छोटा भुगतान माँगा गया।", "लिंक नहीं खोला गया।"],
+            ["इनाम का लालच देकर निजी जानकारी माँगी गई।", "संदेश को अनदेखा किया गया।"],
+            ["खाता बंद होने की चेतावनी देकर जानकारी अपडेट करने को कहा गया।", "आधिकारिक ऐप से जाँच की गई।"],
+            ["सोशल मीडिया संदेश से अनजान लॉगिन पेज पर भेजा गया।", "पासवर्ड दर्ज नहीं किया गया।"],
+            ["कॉल करने वाले ने बैंक कर्मचारी बनकर खाते की जानकारी माँगी।", "कॉल बंद करके आधिकारिक बैंक संपर्क का उपयोग किया।"],
+            ["सर्च रिज़ल्ट में अप्रमाणित कस्टमर केयर नंबर मिला।", "आधिकारिक वेबसाइट उपयोग करने की सलाह दी गई।"],
+            ["रिफंड के नाम पर भुगतान निर्देश मानने को कहा गया।", "निर्देशों का पालन नहीं किया गया।"],
+            ["नकली कुरियर सहायता कॉल में पार्सल के लिए जानकारी माँगी गई।", "निजी जानकारी साझा नहीं की गई।"],
+            ["भुगतान सत्यापन के नाम पर OTP माँगा गया।", "OTP साझा नहीं किया गया।"],
+            ["संदेश में पैसे प्राप्त करने के लिए UPI PIN माँगा गया।", "PIN दर्ज नहीं किया गया।"],
+            ["रिफंड के लिए वन-टाइम कोड माँगा गया।", "अनुरोध अस्वीकार किया गया।"],
+            ["कॉल करने वाले ने पेमेंट ऐप का PIN जानने की कोशिश की।", "कॉल काट दी गई।"],
+            ["सोशल मीडिया विक्रेता को भुगतान किया, लेकिन सामान नहीं मिला।", "भुगतान का संदर्भ नंबर सुरक्षित रखकर सेवा प्रदाता से संपर्क किया।"],
+            ["ऑनलाइन विक्रेता ने भरोसेमंद मार्केटप्लेस के बाहर भुगतान माँगा।", "संदेह होने पर प्रक्रिया रोक दी गई।"],
+            ["बहुत कम कीमत के ऑफर में अनजान विक्रेता ने भुगतान माँगा।", "विक्रेता की जाँच के बाद भुगतान नहीं किया गया।"],
+            ["कॉल करने वाले ने भुगतान समस्या ठीक करने के लिए स्क्रीन शेयरिंग ऐप इंस्टॉल करने को कहा।", "ऐप इंस्टॉल नहीं किया गया।"],
+            ["संदेश में अनजान सहायता ऐप इंस्टॉल करने को कहा गया।", "संदेश हटा दिया गया।"],
+            ["ऑनलाइन काम के नाम पर कमाई का वादा करके जमा राशि माँगी गई।", "और पैसे भेजने से पहले प्रक्रिया रोक दी गई।"],
+            ["उत्तरदाता ने ऑनलाइन भुगतान धोखाधड़ी की कोई घटना नहीं बताई।", "वह अनजान लिंक जाँचता है और आधिकारिक ऐप उपयोग करता है।"]
+        ]
+    },
+    mr: {
+        upi: [
+            ["ग्राहकाने पेमेंटचा स्क्रीनशॉट दाखवला, पण दुकानाच्या अॅपमध्ये पैसे जमा झाले नव्हते.", "वस्तू देण्यापूर्वी दुकानदाराने अॅपमध्ये तपासणी केली."],
+            ["ग्राहकाने जुना पेमेंट फोटो दाखवून नेटवर्क स्लो असल्याचे सांगितले.", "पुन्हा तपासल्यावर पेमेंट जमा झाल्याचे दिसले नाही."],
+            ["यशस्वी पेमेंटचा पुरावा म्हणून कापलेला स्क्रीनशॉट दाखवला.", "अॅपमध्ये पुष्टी मिळेपर्यंत दुकानदार थांबला."],
+            ["स्क्रीनशॉटमधील ट्रान्झॅक्शन क्रमांक दुकानाच्या नोंदीशी जुळत नव्हता.", "संशयास्पद पेमेंट स्वीकारले नाही."],
+            ["ग्राहकाने मागील खरेदीचा स्क्रीनशॉट पुन्हा दाखवला.", "दुकानदाराने अलीकडील ट्रान्झॅक्शन हिस्ट्री तपासली."],
+            ["बनावट पेंडिंग पेमेंट स्क्रीन यशस्वी पेमेंट म्हणून दाखवली.", "पेमेंटची खात्री होईपर्यंत वस्तू दिल्या नाहीत."],
+            ["मेसेजिंग अॅपवर पेमेंटचा फोटो पाठवला, पण खात्यात पैसे जमा झाले नाहीत.", "दुकानदाराने फक्त फोटोवर विश्वास ठेवला नाही."],
+            ["खाते तपासण्यापूर्वी स्क्रीनशॉट स्वीकारला गेला.", "हे संभाव्य नुकसानाचे उदाहरण आहे; प्रत्येक पेमेंट तपासा."],
+            ["फोन करणाऱ्याने ऑडिओ पुष्टीवर विश्वास ठेवण्यास सांगितले.", "दुकानदाराने पेमेंट अॅपमध्ये व्यवहार तपासला."],
+            ["ग्राहकाने पैसे पाठवल्याचा ऑडिओ संदेश वाजवला.", "त्या वेळी संबंधित पेमेंट दिसले नाही."],
+            ["फोन करून लगेच वस्तू देण्यासाठी दबाव आणला.", "दुकानदाराने खात्यात पैसे जमा होण्याची वाट पाहिली."],
+            ["व्यवहार न तपासता ऑडिओला पेमेंटचा पुरावा मानले.", "अॅपमध्ये पेमेंट तपासणे आवश्यक आहे."],
+            ["दुकानाच्या QR वर लावलेल्या स्टिकरमुळे वेगळे प्राप्तकर्त्याचे नाव दिसले.", "ग्राहकांनी वापरण्यापूर्वी QR तपासला."],
+            ["स्कॅन केल्यानंतर दिसलेला UPI ID दुकानाच्या खात्याशी जुळत नव्हता.", "पेमेंट रद्द करून QR तपासला."],
+            ["मूळ QR जवळ दुसरी अनोळखी प्रिंटेड QR प्रत आढळली.", "दुकानदाराने अनोळखी QR काढून टाकला."],
+            ["प्राप्तकर्त्याचे नाव दुकानाच्या नावापेक्षा वेगळे असल्याचे ग्राहकाने सांगितले.", "दुकानदाराने QR पुन्हा तपासला."],
+            ["अनोळखी व्यक्तीने पैसे मिळण्याच्या नावाखाली कलेक्ट रिक्वेस्ट पाठवली.", "रिक्वेस्ट नाकारली."],
+            ["रिफंडच्या नावाखाली पेमेंट रिक्वेस्ट स्वीकारण्यास सांगितले.", "दुकानदाराने रिक्वेस्ट स्वीकारली नाही."],
+            ["कलेक्ट रिक्वेस्टनंतर ग्राहकाने UPI PIN टाकण्यास सांगितले.", "रिक्वेस्ट रद्द केली."],
+            ["रिक्वेस्ट स्वीकारल्यास खात्यात पैसे येतील असा संदेश आला.", "दुकानदाराने रिक्वेस्ट तपासून नाकारली."],
+            ["खरेदीच्या चर्चेदरम्यान अनोळखी UPI खात्यातून कलेक्ट रिक्वेस्ट आली.", "दुकानदाराने अनोळखी रिक्वेस्ट स्वीकारली नाही."],
+            ["ग्राहकाने सारख्या दिसणाऱ्या UPI ID वर पैसे पाठवले.", "दुकानाला पेमेंट मिळाले नाही; ग्राहकाला बँक किंवा अॅपशी संपर्क करण्यास सांगितले."],
+            ["UPI ID नीट न तपासल्याने चुकीच्या खात्यात पैसे गेले.", "पेमेंटपूर्वी प्राप्तकर्त्याची माहिती तपासावी."],
+            ["उत्तरदात्याने UPI फसवणुकीची घटना सांगितली नाही.", "तो पेमेंट अॅपमध्ये जमा झालेली रक्कम तपासतो."],
+            ["उत्तरदात्याने UPI फसवणुकीचा अनुभव नसल्याचे सांगितले.", "विक्री पूर्ण करण्यापूर्वी पेमेंट सूचना तपासतो."],
+            ["या नमुना उत्तरात UPI फसवणुकीची घटना नोंदवलेली नाही.", "दुकानाचा QR कोड दिसेल अशा ठिकाणी ठेवला आहे."],
+            ["उत्तरदात्याने संशयास्पद UPI पेमेंट पाहिलेले नाही.", "शंका आल्यास ट्रान्झॅक्शन हिस्ट्री तपासतो."],
+            ["उत्तरदात्याने फसवणुकीची घटना सांगितली नाही.", "तो आपला UPI PIN इतरांना सांगत नाही."],
+            ["उत्तरदात्याला दुकानात पेमेंट फसवणुकीचा अनुभव आला नाही.", "तो अॅपमध्ये पेमेंटची खात्री करतो."],
+            ["उत्तरदात्याने UPI फसवणुकीचा प्रयत्न पाहिलेला नाही.", "अनोळखी व्यवहार दिसल्यास बँकेशी संपर्क करेल."]
+        ],
+        online: [
+            ["खाते अपडेट करण्याच्या नावाखाली बनावट लिंक असलेला संदेश आला.", "संशयास्पद वेबसाइट दिसल्यावर माहिती भरली नाही."],
+            ["पार्सल डिलिव्हरीच्या नावाखाली लिंकद्वारे थोडे पैसे मागितले.", "लिंक उघडली नाही."],
+            ["बक्षिसाचे आमिष दाखवून वैयक्तिक माहिती मागितली.", "संदेशाकडे दुर्लक्ष केले."],
+            ["खाते बंद होईल अशी सूचना देऊन माहिती अपडेट करण्यास सांगितले.", "अधिकृत अॅपमधून तपासणी केली."],
+            ["सोशल मीडिया संदेशातून अनोळखी लॉगिन पेजवर पाठवले.", "पासवर्ड भरला नाही."],
+            ["फोन करणाऱ्याने बँक कर्मचारी असल्याचे सांगून खात्याची माहिती मागितली.", "फोन बंद करून अधिकृत बँक संपर्क वापरला."],
+            ["सर्च रिझल्टमध्ये अप्रमाणित कस्टमर केअर क्रमांक दिसला.", "अधिकृत वेबसाइट वापरण्याचा सल्ला दिला."],
+            ["रिफंडच्या नावाखाली पेमेंट सूचना पाळण्यास सांगितले.", "सूचनांचे पालन केले नाही."],
+            ["बनावट कुरिअर सपोर्ट कॉलमध्ये पार्सल सोडवण्यासाठी माहिती मागितली.", "वैयक्तिक माहिती दिली नाही."],
+            ["पेमेंट तपासण्याच्या नावाखाली OTP मागितला.", "OTP सांगितला नाही."],
+            ["पैसे मिळवण्यासाठी UPI PIN आवश्यक असल्याचा संदेश आला.", "PIN टाकला नाही."],
+            ["रिफंडसाठी वन-टाइम कोड मागितला.", "विनंती नाकारली."],
+            ["फोन करणाऱ्याने पेमेंट अॅपचा PIN जाणून घेण्याचा प्रयत्न केला.", "फोन बंद केला."],
+            ["सोशल मीडिया विक्रेत्याला पैसे दिले, पण वस्तू मिळाली नाही.", "पेमेंट संदर्भ क्रमांक जतन करून सेवा पुरवठादाराशी संपर्क केला."],
+            ["ऑनलाइन विक्रेत्याने विश्वासार्ह मार्केटप्लेसच्या बाहेर पेमेंट मागितले.", "संशय आल्यावर पुढील व्यवहार थांबवला."],
+            ["खूप कमी किमतीच्या ऑफरमध्ये अनोळखी विक्रेत्याने पेमेंट मागितले.", "विक्रेत्याची तपासणी करून पेमेंट केले नाही."],
+            ["फोन करणाऱ्याने पेमेंट समस्या सोडवण्यासाठी स्क्रीन-शेअरिंग अॅप इन्स्टॉल करण्यास सांगितले.", "अॅप इन्स्टॉल केले नाही."],
+            ["संदेशातून अनोळखी सपोर्ट अॅप इन्स्टॉल करण्यास सांगितले.", "संदेश हटवला."],
+            ["ऑनलाइन कामातून कमाईचे आश्वासन देऊन नंतर पैसे जमा करण्यास सांगितले.", "अधिक पैसे पाठवण्यापूर्वी प्रक्रिया थांबवली."],
+            ["उत्तरदात्याने ऑनलाइन पेमेंट फसवणुकीची घटना सांगितली नाही.", "तो अनोळखी लिंक तपासतो आणि अधिकृत अॅप वापरतो."]
+        ]
+    }
+};
+
+// Change the text shown on the page without changing the original English text.
+function translatePage(language) {
+    currentLanguage = language;
+    document.documentElement.lang = language;
+    if (language === "hi") document.title = "UPI और ऑनलाइन भुगतान धोखाधड़ी अध्ययन";
+    else if (language === "mr") document.title = "UPI आणि ऑनलाइन पेमेंट फसवणूक अभ्यास";
+    else document.title = "UPI and Online Payment Fraud Study";
+
+    var walker = document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT);
+    var textNode;
+
+    while (textNode = walker.nextNode()) {
+        var parentTag = textNode.parentElement ? textNode.parentElement.tagName : "";
+        if (parentTag === "SCRIPT" || parentTag === "STYLE" || parentTag === "OPTION") {
+            continue;
+        }
+
+        if (!originalText.has(textNode)) {
+            originalText.set(textNode, textNode.nodeValue);
+        }
+
+        var englishText = originalText.get(textNode);
+        var cleanText = englishText.trim();
+        var translatedText = englishText;
+
+        if (language !== "en" && pageWords[language] && pageWords[language][cleanText]) {
+            translatedText = englishText.replace(cleanText, pageWords[language][cleanText]);
+        }
+        textNode.nodeValue = translatedText;
+    }
+
+    showTable(upiData, "upiRows");
+    showTable(onlineData, "onlineRows");
+    showChart(upiData, "upiChart");
+    showChart(onlineData, "onlineChart");
+}
+
+function changeLanguage(language) {
+    translatePage(language);
+}
+
+// Replace the basic table function so the sample records also change language.
+function showTable(data, tableId) {
+    var table = document.getElementById(tableId);
+    var rows = "";
+    var group = tableId === "upiRows" ? "upi" : "online";
+
+    for (var i = 0; i < data.length; i++) {
+        var type = data[i][1];
+        var detail = data[i][2];
+        var outcome = data[i][3];
+
+        if (currentLanguage !== "en") {
+            if (typeWords[currentLanguage] && typeWords[currentLanguage][type]) {
+                type = typeWords[currentLanguage][type];
+            }
+            if (sampleText[currentLanguage] && sampleText[currentLanguage][group][i]) {
+                detail = sampleText[currentLanguage][group][i][0];
+                outcome = sampleText[currentLanguage][group][i][1];
+            }
+        }
+
+        rows += "<tr><td>" + data[i][0] + "</td><td>" + type + "</td><td>" + detail + "</td><td>" + outcome + "</td></tr>";
+    }
+    table.innerHTML = rows;
+}
+
+// Rebuild the charts using the selected language.
+function showChart(data, chartId) {
+    var counts = {};
+    for (var i = 0; i < data.length; i++) {
+        var type = data[i][1];
+        if (counts[type] === undefined) {
+            counts[type] = 1;
+        } else {
+            counts[type]++;
+        }
+    }
+
+    var types = Object.keys(counts);
+    var maxCount = 0;
+    for (var j = 0; j < types.length; j++) {
+        if (counts[types[j]] > maxCount) maxCount = counts[types[j]];
+    }
+
+    var chartHTML = "";
+    for (var k = 0; k < types.length; k++) {
+        var name = types[k];
+        var displayName = name;
+        if (currentLanguage !== "en" && typeWords[currentLanguage] && typeWords[currentLanguage][name]) {
+            displayName = typeWords[currentLanguage][name];
+        }
+        var number = counts[name];
+        var width = (number / maxCount) * 100;
+        chartHTML += "<div class='chart-row'><div class='chart-label'><span>" + displayName + "</span><strong>" + number + "</strong></div>";
+        chartHTML += "<div class='chart-background'><div class='chart-bar' style='width:" + width + "%'></div></div></div>";
+    }
+    document.getElementById(chartId).innerHTML = chartHTML;
+}
+
+// Apply English when the page first opens.
+translatePage("en");
+</script>
+
+</body>
+</html>
